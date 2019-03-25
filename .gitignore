@@ -1,2 +1,5 @@
 .R*
 *.Rproj
+.Rproj.user
+*.tsv
+*.txt
