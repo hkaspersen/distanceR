@@ -8,3 +8,10 @@ Description: Generate dendrograms with annotations from cgMLST data, or import p
 License: BSD 3-Clause
 Encoding: UTF-8
 LazyData: true
+Depends:
+  dplyr,
+  tibble,
+  cluster,
+  ape,
+  ggtree,
+  ggplot2
