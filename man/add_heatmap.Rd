@@ -14,9 +14,10 @@ add_heatmap(tree,
             perc_rotate = 95,
             heatmap_offset = 0.05,
             heatmap_width = 0.5,
-            colnames_offset = 2,
+            colnames_offset = 0,
             colnames_position = "top",
-            font_size = 5)
+            font_size = 5,
+            palette_type = "Paired")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
