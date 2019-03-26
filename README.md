@@ -1,6 +1,16 @@
 # distanceR
 R package for calculating distances from cgMLST allele data and annotating dendrograms.
 
+## Installation
+Devtools is needed to install R packages from github.
+`install.packages("devtools")`
+Then activate devtools package.
+`library(devtools)`
+Then, install from github.
+`install_github("hkaspersen/distanceR")`
+Activate with library command.
+`library(distanceR)`
+
 ## Functions:
 
 - calc_dist: Calculate distances from chewBBACA cgMLST.tsv file. Outputs a distance matrix.
