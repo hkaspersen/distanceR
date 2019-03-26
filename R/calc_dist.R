@@ -1,8 +1,7 @@
-# calculate distances and generate basic
-# dendrogram from chewBBACA cgMLST data
+# Calculate distances from cgMLST data and
+# return distance matrix
 calc_dist <- function(path,
-                      metric = "gower",
-                      method = "average") {
+                      metric = "gower") {
   # read cgMLST data
   data <- read.table(path,
                      sep = "\t",
@@ -12,8 +11,7 @@ calc_dist <- function(path,
     column_to_rownames("FILE")
 
   # calculate distances and generate dendrogram
-  tree <- as.phylo(hclust(daisy(data,
-                                metric = metric),
-                          method = method))
-  return(tree)
+  dist <- as.matrix(daisy(data, metric = metric))
+
+  return(dist)
 }

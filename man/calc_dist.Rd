@@ -2,19 +2,26 @@
 \alias{calc_dist}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Import and calculate distances from cgMLST data
+Distance calculation from cgMLST alleles
 }
 \description{
-Imports the "cgMLST.tsv" generated with chewBBACA in the correct format for distance calculation.
-The function then calculates distances between samples in the data by using the "daisy" and "hclust" functions from Cluster, with the default metric "gower" in daisy and "average" method in hclust.
+Imports the cgMLST.tsv file from chewBBACA and calculates distances between samples. Outputs a distance matrix.
 }
 \usage{
-calc_dist(x)
+calc_dist(path, metric = "gower")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+  \item{path}{
+Full path to the cgMLST.tsv file, directly from chewBBACA.
+}
+  \item{metric}{
+Character string specifying the metric to be used, default "gower".
+From the daisy package:
+
+"The currently available options are "euclidean", "manhattan" and "gower".
+Euclidean distances are root sum-of-squares of differences, and manhattan distances are the sum of absolute differences.
+“Gower's distance” is chosen by metric "gower" or automatically if some columns of x are not numeric. Also known as Gower's coefficient (1971), expressed as a dissimilarity, this implies that a particular standardisation will be applied to each variable, and the “distance” between two units is the sum of all the variable-specific distances."
 }
 }
 \details{
@@ -31,7 +38,7 @@ calc_dist(x)
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Håkon Kaspersen
 }
 \note{
 %%  ~~further notes~~
@@ -43,14 +50,7 @@ calc_dist(x)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x)
-{
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
