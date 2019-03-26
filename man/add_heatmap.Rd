@@ -47,6 +47,9 @@ The location of the heatmap column names, default is "top" for a right-hand side
   \item{font_size}{
 Font size of the heatmap column names.
 }
+  \item{palette_type}{
+Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3". See ColorBrewer website for details.
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

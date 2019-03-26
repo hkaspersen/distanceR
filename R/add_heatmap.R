@@ -5,21 +5,22 @@ add_heatmap <- function(tree,
                         perc_rotate = 95,
                         heatmap_offset = 0.05,
                         heatmap_width = 0.5,
-                        colnames_offset = 2,
+                        colnames_offset = 0,
                         colnames_position = "top",
-                        font_size = 5) {
+                        font_size = 5,
+                        palette_type = "Paired") {
   # Import heatmap data
   heatmap_df <- read.table(
     heatmap_data,
     sep = "\t",
     header = TRUE,
     row.names = 1,
-    stringsAsFactors = FALSE
+    colClasses = "factor"
   )
 
   # Create color palette
   vars <- unique(unlist(heatmap_df))
-  palette <- brewer.pal(length(vars), "Paired")
+  palette <- brewer.pal(length(vars), palette_type)
   names(palette) <- vars
 
   # Open tree
