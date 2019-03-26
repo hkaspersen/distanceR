@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Håkon Kaspersen
 Maintainer: Håkon Kaspersen <hakon.kaspersen@vetinst.no>
 Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. Calculate distances and run statistics on distances between groups.
-License: BSD 3-Clause
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Depends:
