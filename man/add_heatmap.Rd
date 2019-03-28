@@ -6,7 +6,8 @@
 \usage{
 add_heatmap(tree, heatmap_data, perc_open = 10, perc_rotate = 95,
   heatmap_offset = 0.05, heatmap_width = 0.5, colnames_offset = 0,
-  colnames_position = "top", font_size = 5, palette_type = "Paired")
+  colnames_position = "top", font_size = 5, palette_type = "Paired",
+  own_palette = NULL)
 }
 \arguments{
 \item{tree}{A tree object to annotate}
@@ -28,6 +29,8 @@ add_heatmap(tree, heatmap_data, perc_open = 10, perc_rotate = 95,
 \item{font_size}{Font size of the heatmap column names}
 
 \item{palette_type}{Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})}
+
+\item{own_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
 }
 \description{
 Annotates tree objects with a heatmap, f. ex. representing presence/absence of genes.

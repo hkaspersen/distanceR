@@ -12,6 +12,8 @@
 #' @param colnames_position The location of the heatmap column names
 #' @param font_size Font size of the heatmap column names
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
+#' @param own_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
+#'
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@vetinst.no}
 #'
@@ -32,7 +34,8 @@ add_heatmap <- function(tree,
                         colnames_offset = 0,
                         colnames_position = "top",
                         font_size = 5,
-                        palette_type = "Paired") {
+                        palette_type = "Paired",
+                        own_palette = NULL) {
   # Import heatmap data
   heatmap_df <- read.table(
     heatmap_data,
@@ -42,10 +45,16 @@ add_heatmap <- function(tree,
     colClasses = "factor"
   )
 
-  # Create color palette
-  vars <- unique(unlist(heatmap_df))
-  palette <- brewer.pal(length(vars), palette_type)
-  names(palette) <- vars
+  # Set colors
+  if (!is.null(own_palette)) {
+    # User-defined color palette
+    palette <- own_palette
+  } else {
+    # Create color palette
+    vars <- unique(unlist(heatmap_df))
+    palette <- brewer.pal(length(vars), palette_type)
+    names(palette) <- vars
+  }
 
   # Open tree
   open_tree <- rotate_tree(open_tree(tree,
