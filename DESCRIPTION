@@ -1,14 +1,14 @@
 Package: distanceR
 Type: Package
-Title: Distance calculation, tree generation and statistical analysis of cgMLST data
+Title: Distance calculation, tree generation and tree annotation
 Version: 0.1.0
 Author: Håkon Kaspersen
 Maintainer: Håkon Kaspersen <hakon.kaspersen@vetinst.no>
-Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. Calculate distances and run statistics on distances between groups.
+Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. 
 License: MIT
 Encoding: UTF-8
 LazyData: true
-Depends:
+Imports:
   dplyr,
   tibble,
   cluster,
@@ -16,3 +16,4 @@ Depends:
   ggtree,
   ggplot2,
   RColorBrewer
+RoxygenNote: 6.1.1
