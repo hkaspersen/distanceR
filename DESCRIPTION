@@ -8,6 +8,7 @@ Description: Generate dendrograms with annotations from cgMLST data, or import p
 License: MIT
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.5.0)
 Imports:
   dplyr,
   tibble,
