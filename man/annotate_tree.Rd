@@ -4,7 +4,7 @@
 \alias{annotate_tree}
 \title{Annotate tree with metadata}
 \usage{
-annotate_tree(tree, metadata_path, file = FALSE, layout = "circular",
+annotate_tree(tree, metadata, layout = "circular",
   tree_color = "black", line_width = 0.1, color_variable,
   tippoint_size = 1, label_variable, label_size = 4,
   label_offset = 0.01, palette_type = "Paired", own_palette = NULL)
@@ -12,9 +12,7 @@ annotate_tree(tree, metadata_path, file = FALSE, layout = "circular",
 \arguments{
 \item{tree}{A tree object to annotate}
 
-\item{metadata_path}{The path to a tab-separated metadata file with information to annotate with. The first column in the file must be exact-matching IDs to the IDs used to create the tree}
-
-\item{file}{Logical, should an R object be used as metadata file instead of a system file?}
+\item{metadata}{The path to a tab-separated metadata file with information to annotate with. The first column in the file must be exact-matching IDs to the IDs used to create the tree. May also be a data frame.}
 
 \item{layout}{One of 'rectangular', 'slanted', 'fan', 'circular', 'radial', 'equal_angle' or 'daylight' (see \code{\link[ggtree]{ggtree}})}
 

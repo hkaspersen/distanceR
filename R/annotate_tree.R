@@ -3,8 +3,7 @@
 #' Add informative node colors and labels to existing tree. The function creates unique color palettes based on unique column values in supplied metadata file.
 #'
 #' @param tree A tree object to annotate
-#' @param metadata_path The path to a tab-separated metadata file with information to annotate with. The first column in the file must be exact-matching IDs to the IDs used to create the tree
-#' @param file Logical, should an R object be used as metadata file instead of a system file?
+#' @param metadata The path to a tab-separated metadata file with information to annotate with. The first column in the file must be exact-matching IDs to the IDs used to create the tree. May also be a data frame.
 #' @param layout One of 'rectangular', 'slanted', 'fan', 'circular', 'radial', 'equal_angle' or 'daylight' (see \code{\link[ggtree]{ggtree}})
 #' @param tree_color The color of the tree
 #' @param line_width The width of the lines in the tree
@@ -26,8 +25,7 @@
 #' @importFrom ggplot2 scale_color_manual
 #'
 annotate_tree <- function(tree,
-                          metadata_path,
-                          file = FALSE,
+                          metadata,
                           layout = "circular",
                           tree_color = "black",
                           line_width = 0.1,
@@ -39,13 +37,13 @@ annotate_tree <- function(tree,
                           palette_type = "Paired",
                           own_palette = NULL) {
 
-  if (file == TRUE) {
+  if (is.data.frame(metadata) == TRUE) {
     # Set data frame object
-    metadata_df <- metadata_path
+    metadata_df <- metadata
   } else {
     # Import metadata
     metadata_df <- read.table(
-      metadata_path,
+      metadata,
       sep = "\t",
       header = TRUE,
       stringsAsFactors = FALSE)
@@ -62,32 +60,30 @@ annotate_tree <- function(tree,
     names(palette) <- vars
   }
 
-  if (layout == "circular") {
-    annotated_tree <- ggtree(tree,
-                             layout = layout,
-                             color = tree_color,
-                             size = line_width) %<+% metadata_df +
-      geom_tippoint(aes(color = !! sym(color_variable)),
-                    size = tippoint_size) +
-      geom_tiplab2(aes(label = !! sym(label_variable)),
-                   offset = label_offset,
-                   size = label_size) +
-      scale_color_manual(values = palette)
-  }
+  if (layout %in% c("circular","fan")) {
+        p <- ggtree(tree,
+                    layout = layout,
+                    color = tree_color,
+                    size = line_width) %<+% metadata_df +
+          geom_tiplab2(aes(label = !! sym(label_variable)),
+                       offset = label_offset,
+                       size = label_size) +
+          geom_tippoint(aes(color = !! sym(color_variable)),
+                        size = tippoint_size) +
+          scale_color_manual(values = palette)
+      } else {
+        p <- ggtree(tree,
+                    layout = layout,
+                    color = tree_color,
+                    size = line_width) %<+% metadata_df +
+          geom_tiplab(aes(label = !! sym(label_variable)),
+                      offset = label_offset,
+                      size = label_size) +
+          geom_tippoint(aes(color = !! sym(color_variable)),
+                        size = tippoint_size) +
+          scale_color_manual(values = palette)
+      }
 
-  if (layout != "circular") {
-    annotated_tree <- ggtree(tree,
-                             layout = layout,
-                             color = tree_color,
-                             size = line_width) %<+% metadata_df +
-      geom_tippoint(aes(color = !! sym(color_variable)),
-                    size = tippoint_size) +
-      geom_tiplab(aes(label = !! sym(label_variable)),
-                  offset = label_offset,
-                  size = label_size) +
-      scale_color_manual(values = palette)
-  }
-
-  return(annotated_tree)
+  return(p)
 
 }
