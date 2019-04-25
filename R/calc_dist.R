@@ -23,7 +23,7 @@ calc_dist <- function(path,
     na_if("0") %>%
     column_to_rownames("FILE")
 
-  # calculate distances and generate dendrogram
+  # calculate distances
   dist <- as.matrix(daisy(data, metric = metric))
 
   return(dist)
