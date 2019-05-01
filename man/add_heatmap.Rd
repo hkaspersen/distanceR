@@ -4,15 +4,17 @@
 \alias{add_heatmap}
 \title{Add heatmap to tree objects}
 \usage{
-add_heatmap(tree, heatmap_data, perc_open = 10, perc_rotate = 95,
-  heatmap_offset = 0.05, heatmap_width = 0.5, colnames_offset = 0,
-  colnames_position = "top", font_size = 5, palette_type = "Paired",
-  own_palette = NULL)
+add_heatmap(tree, heatmap_data, layout = "circular", perc_open = 10,
+  perc_rotate = 95, heatmap_offset = 0.05, heatmap_width = 0.5,
+  colnames_offset = 0, colnames_position = "top", colnames_angle = 0,
+  font_size = 5, palette_type = "Paired", own_palette = NULL)
 }
 \arguments{
 \item{tree}{A tree object to annotate}
 
 \item{heatmap_data}{A file containing the data to add heatmap of. The first column need to hold the same ID's used to create the tree object. The remaining columns will be used in the heatmap. Each unique value in the whole file, except the ID column, will be given a unique color}
+
+\item{layout}{The layout of the tree, either "circular", "rectangular", or other, (see \code{\link[ggtree]{ggtree}})}
 
 \item{perc_open}{How many percent the tree is opened. This is used to fit the heatmap labels in the gap produced}
 
@@ -25,6 +27,8 @@ add_heatmap(tree, heatmap_data, perc_open = 10, perc_rotate = 95,
 \item{colnames_offset}{The distance between the heatmap column names and the heatmap}
 
 \item{colnames_position}{The location of the heatmap column names}
+
+\item{colnames_angle}{The angle of the column names}
 
 \item{font_size}{Font size of the heatmap column names}
 
