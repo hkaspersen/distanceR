@@ -30,9 +30,9 @@ annotate_tree <- function(tree,
                           layout = "circular",
                           tree_color = "black",
                           line_width = 0.1,
-                          color_variable,
+                          color_variable = NULL,
                           tippoint_size = 1,
-                          label_variable,
+                          label_variable = NULL,
                           label_size = 4,
                           label_offset = 0.01,
                           palette_type = "Paired",
@@ -53,13 +53,17 @@ annotate_tree <- function(tree,
 
   # Set colors
   if (!is.null(own_palette)) {
-    # User-defined color palette
-    palette <- own_palette
+    if (!is.null(color_variable)) {
+      # User-defined color palette
+      palette <- own_palette
+    }
   } else {
-    # automatically create based on variables
-    vars <- unique(metadata_df[[color_variable]])
-    palette <- brewer.pal(length(vars), palette_type)
-    names(palette) <- vars
+    if (!is.null(color_variable)) {
+      # automatically create based on variables
+      vars <- unique(metadata_df[[color_variable]])
+      palette <- brewer.pal(length(vars), palette_type)
+      names(palette) <- vars
+    }
   }
 
   if (layout %in% c("circular","fan")) {
@@ -67,24 +71,30 @@ annotate_tree <- function(tree,
                     layout = layout,
                     color = tree_color,
                     size = line_width) %<+% metadata_df +
-          geom_tiplab2(aes(label = !! sym(label_variable)),
-                       offset = label_offset,
-                       size = label_size) +
-          geom_tippoint(aes(color = !! sym(color_variable)),
-                        size = tippoint_size) +
-          scale_color_manual(values = palette) +
+          {if (!is.null(label_variable))
+            geom_tiplab2(aes(label = !! sym(label_variable)),
+                         offset = label_offset,
+                         size = label_size)} +
+          {if (!is.null(color_variable))
+            geom_tippoint(aes(color = !! sym(color_variable)),
+                        size = tippoint_size)} +
+          {if (!is.null(color_variable))
+            scale_color_manual(values = palette)} +
           theme(legend.position = legend_position)
       } else {
         p <- ggtree(tree,
                     layout = layout,
                     color = tree_color,
                     size = line_width) %<+% metadata_df +
-          geom_tiplab(aes(label = !! sym(label_variable)),
-                      offset = label_offset,
-                      size = label_size) +
-          geom_tippoint(aes(color = !! sym(color_variable)),
-                        size = tippoint_size) +
-          scale_color_manual(values = palette) +
+          {if (!is.null(label_variable))
+            geom_tiplab(aes(label = !! sym(label_variable)),
+                        offset = label_offset,
+                        size = label_size)} +
+          {if (!is.null(color_variable))
+            geom_tippoint(aes(color = !! sym(color_variable)),
+                          size = tippoint_size)} +
+          {if (!is.null(color_variable))
+            scale_color_manual(values = palette)} +
           theme(legend.position = legend_position)
       }
 
