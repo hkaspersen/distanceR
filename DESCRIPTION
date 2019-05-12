@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Håkon Kaspersen
 Maintainer: Håkon Kaspersen <hakon.kaspersen@vetinst.no>
 Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. 
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
