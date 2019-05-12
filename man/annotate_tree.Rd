@@ -7,7 +7,8 @@
 annotate_tree(tree, metadata, layout = "circular",
   tree_color = "black", line_width = 0.1, color_variable,
   tippoint_size = 1, label_variable, label_size = 4,
-  label_offset = 0.01, palette_type = "Paired", own_palette = NULL)
+  label_offset = 0.01, palette_type = "Paired",
+  legend_position = "right", own_palette = NULL)
 }
 \arguments{
 \item{tree}{A tree object to annotate}
@@ -31,6 +32,8 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{label_offset}{The distance between the labels and the tree}
 
 \item{palette_type}{Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})}
+
+\item{legend_position}{Specify legend position in plot}
 
 \item{own_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
 }

@@ -13,6 +13,7 @@
 #' @param label_size The font size of the labels
 #' @param label_offset The distance between the labels and the tree
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
+#' @param legend_position Specify legend position in plot
 #' @param own_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@vetinst.no}
@@ -35,6 +36,7 @@ annotate_tree <- function(tree,
                           label_size = 4,
                           label_offset = 0.01,
                           palette_type = "Paired",
+                          legend_position = "right",
                           own_palette = NULL) {
 
   if (is.data.frame(metadata) == TRUE) {
@@ -70,7 +72,8 @@ annotate_tree <- function(tree,
                        size = label_size) +
           geom_tippoint(aes(color = !! sym(color_variable)),
                         size = tippoint_size) +
-          scale_color_manual(values = palette)
+          scale_color_manual(values = palette) +
+          theme(legend.position = legend_position)
       } else {
         p <- ggtree(tree,
                     layout = layout,
@@ -81,7 +84,8 @@ annotate_tree <- function(tree,
                       size = label_size) +
           geom_tippoint(aes(color = !! sym(color_variable)),
                         size = tippoint_size) +
-          scale_color_manual(values = palette)
+          scale_color_manual(values = palette) +
+          theme(legend.position = legend_position)
       }
 
   return(p)
