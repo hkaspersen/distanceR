@@ -5,9 +5,11 @@
 \title{Annotate tree with metadata}
 \usage{
 annotate_tree(tree, metadata, layout = "circular",
-  tree_color = "black", line_width = 0.1, color_variable,
-  tippoint_size = 1, label_variable, label_size = 4,
-  label_offset = 0.01, palette_type = "Paired",
+  tree_color = "black", line_width = 0.1, color_variable = NULL,
+  tippoint_size = 1, label_variable = NULL, label_size = 4,
+  label_offset = 0.01, clade_label_node = NULL, clade_label = NULL,
+  cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
+  node_labels = NULL, palette_type = "Paired",
   legend_position = "right", own_palette = NULL)
 }
 \arguments{
@@ -30,6 +32,18 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{label_size}{The font size of the labels}
 
 \item{label_offset}{The distance between the labels and the tree}
+
+\item{clade_label_node}{The node where the clade label is placed}
+
+\item{clade_label}{The label that will be placed on the clade}
+
+\item{cladelabel_offset}{The distance between the tree and the clade label}
+
+\item{align_cladelabel}{Should the clade label be aligned?}
+
+\item{align}{Should the labels align?}
+
+\item{node_labels}{Should node labels be included?}
 
 \item{palette_type}{Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})}
 
