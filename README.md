@@ -21,5 +21,7 @@ Activate with library command.
 
 - add_heatmap: Annotates existing tree object with a heatmap from a supplied text file. The file need to be tab separated, where the first column has the ID's that were used to create the tree object (exact matches, the order of the ID's doesn't matter). The rest of the columns in the file will be used in the heatmap.
 
+- plot_tanglegram: Create a tanglegram between two trees to easily compare the leaves
+
 ## Author
 Håkon Kaspersen, Norwegian Veterinary Institute.
