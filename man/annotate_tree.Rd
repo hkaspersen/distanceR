@@ -9,7 +9,9 @@ annotate_tree(tree, metadata, layout = "circular",
   tippoint_size = 1, label_variable = NULL, label_size = 4,
   label_offset = 0.01, clade_label_node = NULL, clade_label = NULL,
   cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
-  ladderize = TRUE, node_labels = NULL, palette_type = "Paired",
+  ladderize = TRUE, midroot = FALSE, node_labels = NULL,
+  treescale = TRUE, treescale_x = NULL, treescale_y = NULL,
+  treescale_linesize = 0.5, palette_type = "Paired",
   legend_position = "right", own_palette = NULL)
 }
 \arguments{
@@ -45,7 +47,17 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{ladderize}{Should the tips be ladderized?}
 
+\item{midroot}{Should the tree be midrooted?}
+
 \item{node_labels}{Should node labels be included?}
+
+\item{treescale}{Should a treescale be rendered?}
+
+\item{treescale_x}{x position of treescale}
+
+\item{treescale_y}{y position of treescale}
+
+\item{treescale_linesize}{Size of the treescale line}
 
 \item{palette_type}{Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})}
 

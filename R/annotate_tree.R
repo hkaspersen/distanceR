@@ -18,7 +18,12 @@
 #' @param align_cladelabel Should the clade label be aligned?
 #' @param align Should the labels align?
 #' @param ladderize Should the tips be ladderized?
+#' @param midroot Should the tree be midrooted?
 #' @param node_labels Should node labels be included?
+#' @param treescale Should a treescale be rendered?
+#' @param treescale_x x position of treescale
+#' @param treescale_y y position of treescale
+#' @param treescale_linesize Size of the treescale line
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
 #' @param legend_position Specify legend position in plot
 #' @param own_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
@@ -28,6 +33,7 @@
 #' @export
 #' @import ggtree
 #' @import dplyr
+#' @importFrom phytools midpoint.root
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom utils read.table
 #' @importFrom ggplot2 scale_color_manual
@@ -48,7 +54,12 @@ annotate_tree <- function(tree,
                           align_cladelabel = FALSE,
                           align = FALSE,
                           ladderize = TRUE,
+                          midroot = FALSE,
                           node_labels = NULL,
+                          treescale = TRUE,
+                          treescale_x = NULL,
+                          treescale_y = NULL,
+                          treescale_linesize = 0.5,
                           palette_type = "Paired",
                           legend_position = "right",
                           own_palette = NULL) {
@@ -80,6 +91,11 @@ annotate_tree <- function(tree,
     }
   }
 
+  if (midroot == TRUE) {
+    tree <- midpoint.root(tree)
+  }
+
+
   if (layout %in% c("circular","fan")) {
         p <- ggtree(tree,
                     layout = layout,
@@ -101,6 +117,10 @@ annotate_tree <- function(tree,
           {if (!is.null(color_variable))
             geom_tippoint(aes(color = !! sym(color_variable)),
                         size = tippoint_size)} +
+          {if (!is.null(treescale))
+            geom_treescale(x = treescale_x,
+                           y = treescale_y,
+                           linesize = treescale_linesize)} +
           {if (!is.null(color_variable))
             scale_color_manual(values = palette)} +
           theme(legend.position = legend_position)
@@ -125,6 +145,10 @@ annotate_tree <- function(tree,
           {if (!is.null(color_variable))
             geom_tippoint(aes(color = !! sym(color_variable)),
                           size = tippoint_size)} +
+          {if (!is.null(treescale))
+            geom_treescale(x = treescale_x,
+                           y = treescale_y,
+                           linesize = treescale_linesize)} +
           {if (!is.null(color_variable))
             scale_color_manual(values = palette)} +
           theme(legend.position = legend_position)
