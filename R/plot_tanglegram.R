@@ -21,13 +21,23 @@ plot_tanglegram <- function(tree1, tree2, plot_title = NULL) {
 
   d2$x <- max(d2$x) - d2$x + max(d1$x) + 1
 
-
   pp <- p1 + geom_tree(data=d2)
 
   dd <- bind_rows(d1, d2) %>%
-    filter(!is.na(label))
+    filter(!is.na(label)) %>%
+    group_by(label) %>%
+    mutate(is_horiz = n_distinct(node) == 1) %>%
+    ungroup()
 
-  final_plot <- pp + geom_line(aes(x, y, group=label), data=dd, color='grey') +
+  final_plot <- pp + geom_line(aes(x,
+                                   y,
+                                   group = label,
+                                   color = is_horiz),
+                               data = dd) +
+    scale_color_manual(values = c('TRUE' = "#80b1d3",
+                                  'FALSE' = "#fb8072")) +
+    theme(legend.position = c(.9,.9)) +
+    labs(color = 'Horizontal Nodes') +
     ggtitle(plot_title)
 
   return(final_plot)
