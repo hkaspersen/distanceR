@@ -17,6 +17,7 @@
 #' @param cladelabel_offset The distance between the tree and the clade label
 #' @param align_cladelabel Should the clade label be aligned?
 #' @param align Should the labels align?
+#' @param ladderize Should the tips be ladderized?
 #' @param node_labels Should node labels be included?
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
 #' @param legend_position Specify legend position in plot
@@ -46,6 +47,7 @@ annotate_tree <- function(tree,
                           cladelabel_offset = NULL,
                           align_cladelabel = FALSE,
                           align = FALSE,
+                          ladderize = TRUE,
                           node_labels = NULL,
                           palette_type = "Paired",
                           legend_position = "right",
@@ -82,7 +84,8 @@ annotate_tree <- function(tree,
         p <- ggtree(tree,
                     layout = layout,
                     color = tree_color,
-                    size = line_width) %<+% metadata_df +
+                    size = line_width,
+                    ladderize = ladderize) %<+% metadata_df +
           {if (!is.null(node_labels))
             geom_text(aes(label=node))} +
           {if (!is.null(clade_label))
@@ -105,7 +108,8 @@ annotate_tree <- function(tree,
         p <- ggtree(tree,
                     layout = layout,
                     color = tree_color,
-                    size = line_width) %<+% metadata_df +
+                    size = line_width,
+                    ladderize = ladderize) %<+% metadata_df +
           {if (!is.null(node_labels))
             geom_text(aes(label=node))} +
           {if (!is.null(clade_label))

@@ -9,7 +9,7 @@ annotate_tree(tree, metadata, layout = "circular",
   tippoint_size = 1, label_variable = NULL, label_size = 4,
   label_offset = 0.01, clade_label_node = NULL, clade_label = NULL,
   cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
-  node_labels = NULL, palette_type = "Paired",
+  ladderize = TRUE, node_labels = NULL, palette_type = "Paired",
   legend_position = "right", own_palette = NULL)
 }
 \arguments{
@@ -42,6 +42,8 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{align_cladelabel}{Should the clade label be aligned?}
 
 \item{align}{Should the labels align?}
+
+\item{ladderize}{Should the tips be ladderized?}
 
 \item{node_labels}{Should node labels be included?}
 
