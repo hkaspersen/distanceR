@@ -82,6 +82,9 @@ annotate_tree <- function(tree,
                           own_palette = NULL,
                           tree_type = "phylo") {
 
+  # disable scientific notation
+  options(scipen = 999)
+
   if (is.data.frame(metadata) == TRUE) {
     # Set data frame object
     metadata_df <- metadata
