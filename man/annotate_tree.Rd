@@ -7,12 +7,16 @@
 annotate_tree(tree, metadata, layout = "circular",
   tree_color = "black", line_width = 0.1, color_variable = NULL,
   tippoint_size = 1, label_variable = NULL, label_size = 4,
-  label_offset = 0.01, clade_label_node = NULL, clade_label = NULL,
+  label_offset = 0.01, shape_variable = NULL,
+  clade_label_node = NULL, clade_label = NULL,
   cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
-  ladderize = TRUE, midroot = FALSE, node_labels = NULL,
-  treescale = TRUE, treescale_x = NULL, treescale_y = NULL,
-  treescale_linesize = 0.5, palette_type = "Paired",
-  legend_position = "right", own_palette = NULL)
+  ladderize = TRUE, midroot = FALSE, node_labels = FALSE,
+  bootstrap_lab = TRUE, bootlab_size = 3, bootstrap_var = NULL,
+  nodepoint_size = 3, nodepoint_color = "viridis",
+  viridis_option = "D", treescale = TRUE, treescale_x = NULL,
+  treescale_y = NULL, treescale_linesize = 0.5,
+  palette_type = "Paired", legend_position = "right",
+  own_palette = NULL, tree_type = "phylo")
 }
 \arguments{
 \item{tree}{A tree object to annotate}
@@ -35,6 +39,8 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{label_offset}{The distance between the labels and the tree}
 
+\item{shape_variable}{A string representing the column in the metadata file to represent as shapes on the tips}
+
 \item{clade_label_node}{The node where the clade label is placed}
 
 \item{clade_label}{The label that will be placed on the clade}
@@ -49,7 +55,17 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{midroot}{Should the tree be midrooted?}
 
-\item{node_labels}{Should node labels be included?}
+\item{node_labels}{Should node labels be included? This is the node number, not the bootstrap values!}
+
+\item{bootstrap_lab}{Should the bootstrap values be included? Note: This is the values in the node.label data from the tree}
+
+\item{bootlab_size}{The size of the bootstrap values}
+
+\item{bootstrap_var}{The bootstrap values used to create colored nodes in the tree, only works for Treedata types}
+
+\item{nodepoint_size}{The size of the colored bootstrap nodes}
+
+\item{nodepoint_color}{Color scale for bootstrap values, either "viridis" or "base"}
 
 \item{treescale}{Should a treescale be rendered?}
 
@@ -64,6 +80,8 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{legend_position}{Specify legend position in plot}
 
 \item{own_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
+
+\item{tree_type}{What type of tree object to use, either "treedata" or "phylo"}
 }
 \description{
 Add informative node colors and labels to existing tree. The function creates unique color palettes based on unique column values in supplied metadata file.

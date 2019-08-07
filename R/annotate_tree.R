@@ -12,6 +12,7 @@
 #' @param label_variable A string representing the column name in the metadata file to plot as labels on the tree
 #' @param label_size The font size of the labels
 #' @param label_offset The distance between the labels and the tree
+#' @param shape_variable A string representing the column in the metadata file to represent as shapes on the tips
 #' @param clade_label_node The node where the clade label is placed
 #' @param clade_label The label that will be placed on the clade
 #' @param cladelabel_offset The distance between the tree and the clade label
@@ -19,7 +20,12 @@
 #' @param align Should the labels align?
 #' @param ladderize Should the tips be ladderized?
 #' @param midroot Should the tree be midrooted?
-#' @param node_labels Should node labels be included?
+#' @param node_labels Should node labels be included? This is the node number, not the bootstrap values!
+#' @param bootstrap_lab Should the bootstrap values be included? Note: This is the values in the node.label data from the tree
+#' @param bootlab_size The size of the bootstrap values
+#' @param bootstrap_var The bootstrap values used to create colored nodes in the tree, only works for Treedata types
+#' @param nodepoint_size The size of the colored bootstrap nodes
+#' @param nodepoint_color Color scale for bootstrap values, either "viridis" or "base"
 #' @param treescale Should a treescale be rendered?
 #' @param treescale_x x position of treescale
 #' @param treescale_y y position of treescale
@@ -27,16 +33,20 @@
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
 #' @param legend_position Specify legend position in plot
 #' @param own_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
+#' @param tree_type What type of tree object to use, either "treedata" or "phylo"
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@vetinst.no}
 #'
 #' @export
 #' @import ggtree
 #' @import dplyr
+#' @import viridis
 #' @importFrom phytools midpoint.root
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom utils read.table
 #' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 scale_fill_gradient
+#' @importFrom ggplot2 guide_colorbar
 #'
 annotate_tree <- function(tree,
                           metadata,
@@ -48,6 +58,7 @@ annotate_tree <- function(tree,
                           label_variable = NULL,
                           label_size = 4,
                           label_offset = 0.01,
+                          shape_variable = NULL,
                           clade_label_node = NULL,
                           clade_label = NULL,
                           cladelabel_offset = NULL,
@@ -55,14 +66,21 @@ annotate_tree <- function(tree,
                           align = FALSE,
                           ladderize = TRUE,
                           midroot = FALSE,
-                          node_labels = NULL,
+                          node_labels = FALSE,
+                          bootstrap_lab = TRUE,
+                          bootlab_size = 3,
+                          bootstrap_var = NULL,
+                          nodepoint_size = 3,
+                          nodepoint_color = "viridis",
+                          viridis_option = "D",
                           treescale = TRUE,
                           treescale_x = NULL,
                           treescale_y = NULL,
                           treescale_linesize = 0.5,
                           palette_type = "Paired",
                           legend_position = "right",
-                          own_palette = NULL) {
+                          own_palette = NULL,
+                          tree_type = "phylo") {
 
   if (is.data.frame(metadata) == TRUE) {
     # Set data frame object
@@ -77,6 +95,7 @@ annotate_tree <- function(tree,
   }
 
   # Set colors
+
   if (!is.null(own_palette)) {
     if (!is.null(color_variable)) {
       # User-defined color palette
@@ -91,68 +110,135 @@ annotate_tree <- function(tree,
     }
   }
 
+  # Midroot tree
+
   if (midroot == TRUE) {
-    tree <- midpoint.root(tree)
+    if (tree_type == "phylo") {
+      tree <- midpoint.root(tree)
+      }
+
+    if (tree_type == "treedata") {
+      tree@phylo <- midpoint.root(tree@phylo)
+      }
   }
 
+  # Render tree
 
   if (layout %in% c("circular","fan")) {
-        p <- ggtree(tree,
-                    layout = layout,
-                    color = tree_color,
-                    size = line_width,
-                    ladderize = ladderize) %<+% metadata_df +
-          {if (!is.null(node_labels))
-            geom_text(aes(label=node))} +
-          {if (!is.null(clade_label))
-            geom_cladelabel(clade_label_node,
-                            clade_label,
-                            offset = cladelabel_offset,
-                            align = align_cladelabel)} +
-          {if (!is.null(label_variable))
-            geom_tiplab2(aes(label = !! sym(label_variable)),
-                         offset = label_offset,
-                         size = label_size,
-                         align = align)} +
-          {if (!is.null(color_variable))
-            geom_tippoint(aes(color = !! sym(color_variable)),
+      p <- ggtree(tree,
+                  layout = layout,
+                  color = tree_color,
+                  size = line_width,
+                  ladderize = ladderize) %<+% metadata_df +
+        {if (isTRUE(node_labels))
+          geom_text(aes(label=node))} +
+        {if (isTRUE(bootstrap_lab))
+          geom_nodelab(size = bootlab_size)} +
+        {if (!is.null(bootstrap_var))
+          geom_nodepoint(aes(fill = !! sym(bootstrap_var)),
+                         size = nodepoint_size,
+                         pch = 21)} +
+        {if (!is.null(clade_label))
+          geom_cladelabel(clade_label_node,
+                          clade_label,
+                          offset = cladelabel_offset,
+                          align = align_cladelabel)} +
+        {if (!is.null(label_variable))
+          geom_tiplab2(aes(label = !! sym(label_variable)),
+                       offset = label_offset,
+                       size = label_size,
+                       align = align)} +
+        {if (!is.null(color_variable) & !is.null(shape_variable))
+          geom_tippoint(aes(color = !! sym(color_variable),
+                            shape = !! sym(shape_variable)),
                         size = tippoint_size)} +
-          {if (!is.null(treescale))
-            geom_treescale(x = treescale_x,
-                           y = treescale_y,
-                           linesize = treescale_linesize)} +
-          {if (!is.null(color_variable))
-            scale_color_manual(values = palette)} +
-          theme(legend.position = legend_position)
-      } else {
-        p <- ggtree(tree,
-                    layout = layout,
-                    color = tree_color,
-                    size = line_width,
-                    ladderize = ladderize) %<+% metadata_df +
-          {if (!is.null(node_labels))
-            geom_text(aes(label=node))} +
-          {if (!is.null(clade_label))
-            geom_cladelabel(clade_label_node,
-                            clade_label,
-                            offset = cladelabel_offset,
-                            align = align_cladelabel)} +
-          {if (!is.null(label_variable))
-            geom_tiplab(aes(label = !! sym(label_variable)),
-                        offset = label_offset,
-                        size = label_size,
-                        align = align)} +
-          {if (!is.null(color_variable))
-            geom_tippoint(aes(color = !! sym(color_variable)),
-                          size = tippoint_size)} +
-          {if (!is.null(treescale))
-            geom_treescale(x = treescale_x,
-                           y = treescale_y,
-                           linesize = treescale_linesize)} +
-          {if (!is.null(color_variable))
-            scale_color_manual(values = palette)} +
-          theme(legend.position = legend_position)
-      }
+        {if (!is.null(color_variable) & is.null(shape_variable))
+          geom_tippoint(aes(color = !! sym(color_variable)),
+                        size = tippoint_size)} +
+        {if (is.null(color_variable) & !is.null(shape_variable))
+          geom_tippoint(aes(shape = !! sym(shape_variable)),
+                        size = tippoint_size)} +
+        {if (!is.null(treescale))
+          geom_treescale(x = treescale_x,
+                         y = treescale_y,
+                         linesize = treescale_linesize)} +
+        {if (!is.null(color_variable))
+          scale_color_manual(values = palette)} +
+        {if (nodepoint_color == "viridis")
+          scale_fill_viridis(limits = c(0, 100),
+                             na.value = "white",
+                             option = viridis_option,
+                             guide = guide_colorbar(ticks = T,
+                                                    nbin = 50,
+                                                    barheight = 8,
+                                                    barwidth = 0.8))} +
+        {if (nodepoint_color == "base")
+          scale_fill_gradient(limits = c(0, 100),
+                              na.value = "white",
+                              guide = guide_colorbar(ticks = T,
+                                                     nbin = 50,
+                                                     barheight = 8,
+                                                     barwidth = 0.8))} +
+        theme(legend.position = legend_position)
+
+    } else {
+
+      p <- ggtree(tree,
+                  layout = layout,
+                  color = tree_color,
+                  size = line_width,
+                  ladderize = ladderize) %<+% metadata_df +
+        {if (isTRUE(node_labels))
+          geom_text(aes(label=node))} +
+        {if (isTRUE(bootstrap_lab))
+          geom_nodelab(size = bootlab_size)} +
+        {if (!is.null(bootstrap_var))
+          geom_nodepoint(aes(fill = !! sym(bootstrap_var)),
+                         size = nodepoint_size,
+                         pch = 21)} +
+        {if (!is.null(clade_label))
+          geom_cladelabel(clade_label_node,
+                          clade_label,
+                          offset = cladelabel_offset,
+                          align = align_cladelabel)} +
+        {if (!is.null(label_variable))
+          geom_tiplab(aes(label = !! sym(label_variable)),
+                      offset = label_offset,
+                      size = label_size,
+                      align = align)} +
+        {if (!is.null(color_variable) & !is.null(shape_variable))
+          geom_tippoint(aes(color = !! sym(color_variable),
+                            shape = !! sym(shape_variable)),
+                        size = tippoint_size)} +
+        {if (!is.null(color_variable) & is.null(shape_variable))
+          geom_tippoint(aes(color = !! sym(color_variable)),
+                        size = tippoint_size)} +
+        {if (is.null(color_variable) & !is.null(shape_variable))
+          geom_tippoint(aes(shape = !! sym(shape_variable)),
+                        size = tippoint_size)} +
+        {if (!is.null(treescale))
+          geom_treescale(x = treescale_x,
+                         y = treescale_y,
+                         linesize = treescale_linesize)} +
+        {if (!is.null(color_variable))
+          scale_color_manual(values = palette)} +
+        {if (nodepoint_color == "viridis")
+          scale_fill_viridis(limits = c(0, 100),
+                             na.value = "white",
+                             option = viridis_option,
+                             guide = guide_colorbar(ticks = T,
+                                                    nbin = 50,
+                                                    barheight = 8,
+                                                    barwidth = 0.8))} +
+        {if (nodepoint_color == "base")
+          scale_fill_gradient(limits = c(0, 100),
+                              na.value = "white",
+                              guide = guide_colorbar(ticks = T,
+                                                     nbin = 50,
+                                                     barheight = 8,
+                                                     barwidth = 0.8))} +
+        theme(legend.position = legend_position)
+    }
 
   return(p)
 
