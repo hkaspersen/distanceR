@@ -7,16 +7,17 @@
 annotate_tree(tree, metadata, layout = "circular",
   tree_color = "black", line_width = 0.1, color_variable = NULL,
   tippoint_size = 1, label_variable = NULL, label_size = 4,
-  label_offset = 0.01, shape_variable = NULL,
-  clade_label_node = NULL, clade_label = NULL,
+  label_offset = 0.01, shape_variable = NULL, shape_values = c(15,
+  16, 17, 18, 19), clade_label_node = NULL, clade_label = NULL,
   cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
-  ladderize = TRUE, midroot = FALSE, node_labels = FALSE,
-  bootstrap_lab = TRUE, bootlab_size = 3, bootstrap_var = NULL,
+  line_type = "dotted", line_size = 0.5, ladderize = TRUE,
+  midroot = FALSE, node_labels = FALSE, bootstrap_lab = TRUE,
+  nodelab_geom = "label", bootlab_size = 3, bootstrap_var = NULL,
   nodepoint_size = 3, nodepoint_color = "viridis",
   viridis_option = "D", treescale = TRUE, treescale_x = NULL,
   treescale_y = NULL, treescale_linesize = 0.5,
   palette_type = "Paired", legend_position = "right",
-  own_palette = NULL, tree_type = "phylo")
+  color_palette = NULL, shape_palette = NULL, tree_type = "phylo")
 }
 \arguments{
 \item{tree}{A tree object to annotate}
@@ -41,6 +42,8 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{shape_variable}{A string representing the column in the metadata file to represent as shapes on the tips}
 
+\item{shape_values}{The shape types}
+
 \item{clade_label_node}{The node where the clade label is placed}
 
 \item{clade_label}{The label that will be placed on the clade}
@@ -51,6 +54,10 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{align}{Should the labels align?}
 
+\item{line_type}{If align = TRUE, what type of line should be rendered?}
+
+\item{line_size}{If align = TRUE, the size of the lines}
+
 \item{ladderize}{Should the tips be ladderized?}
 
 \item{midroot}{Should the tree be midrooted?}
@@ -58,6 +65,8 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{node_labels}{Should node labels be included? This is the node number, not the bootstrap values!}
 
 \item{bootstrap_lab}{Should the bootstrap values be included? Note: This is the values in the node.label data from the tree}
+
+\item{nodelab_geom}{Should the bootstrap labels be plain text or labels?}
 
 \item{bootlab_size}{The size of the bootstrap values}
 
@@ -79,7 +88,9 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{legend_position}{Specify legend position in plot}
 
-\item{own_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
+\item{color_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
+
+\item{shape_palette}{Use your own named vector as shape palette}
 
 \item{tree_type}{What type of tree object to use, either "treedata" or "phylo"}
 }

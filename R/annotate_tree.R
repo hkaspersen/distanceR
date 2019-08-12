@@ -13,15 +13,19 @@
 #' @param label_size The font size of the labels
 #' @param label_offset The distance between the labels and the tree
 #' @param shape_variable A string representing the column in the metadata file to represent as shapes on the tips
+#' @param shape_values The shape types
 #' @param clade_label_node The node where the clade label is placed
 #' @param clade_label The label that will be placed on the clade
 #' @param cladelabel_offset The distance between the tree and the clade label
 #' @param align_cladelabel Should the clade label be aligned?
 #' @param align Should the labels align?
+#' @param line_type If align = TRUE, what type of line should be rendered?
+#' @param line_size If align = TRUE, the size of the lines
 #' @param ladderize Should the tips be ladderized?
 #' @param midroot Should the tree be midrooted?
 #' @param node_labels Should node labels be included? This is the node number, not the bootstrap values!
 #' @param bootstrap_lab Should the bootstrap values be included? Note: This is the values in the node.label data from the tree
+#' @param nodelab_geom Should the bootstrap labels be plain text or labels?
 #' @param bootlab_size The size of the bootstrap values
 #' @param bootstrap_var The bootstrap values used to create colored nodes in the tree, only works for Treedata types
 #' @param nodepoint_size The size of the colored bootstrap nodes
@@ -32,7 +36,8 @@
 #' @param treescale_linesize Size of the treescale line
 #' @param palette_type Specify which colorBrewer palette to use. Choose from "Accent", "Dark2", "Paired", "Pastel1", "Pastel2", "Set1", "Set2", "Set3" (see \code{\link[RColorBrewer]{brewer.pal}})
 #' @param legend_position Specify legend position in plot
-#' @param own_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
+#' @param color_palette If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer
+#' @param shape_palette Use your own named vector as shape palette
 #' @param tree_type What type of tree object to use, either "treedata" or "phylo"
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@vetinst.no}
@@ -41,11 +46,12 @@
 #' @import ggtree
 #' @import dplyr
 #' @import viridis
-#' @importFrom phytools midpoint.root
+#' @importFrom phangorn midpoint
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom utils read.table
 #' @importFrom ggplot2 scale_color_manual
 #' @importFrom ggplot2 scale_fill_gradient
+#' @importFrom ggplot2 scale_shape_manual
 #' @importFrom ggplot2 guide_colorbar
 #'
 annotate_tree <- function(tree,
@@ -59,15 +65,19 @@ annotate_tree <- function(tree,
                           label_size = 4,
                           label_offset = 0.01,
                           shape_variable = NULL,
+                          shape_values = c(15, 16, 17, 18, 19),
                           clade_label_node = NULL,
                           clade_label = NULL,
                           cladelabel_offset = NULL,
                           align_cladelabel = FALSE,
                           align = FALSE,
+                          line_type = "dotted",
+                          line_size = 0.5,
                           ladderize = TRUE,
                           midroot = FALSE,
                           node_labels = FALSE,
                           bootstrap_lab = TRUE,
+                          nodelab_geom = "label",
                           bootlab_size = 3,
                           bootstrap_var = NULL,
                           nodepoint_size = 3,
@@ -79,7 +89,8 @@ annotate_tree <- function(tree,
                           treescale_linesize = 0.5,
                           palette_type = "Paired",
                           legend_position = "right",
-                          own_palette = NULL,
+                          color_palette = NULL,
+                          shape_palette = NULL,
                           tree_type = "phylo") {
 
   # disable scientific notation
@@ -99,10 +110,10 @@ annotate_tree <- function(tree,
 
   # Set colors
 
-  if (!is.null(own_palette)) {
+  if (!is.null(color_palette)) {
     if (!is.null(color_variable)) {
       # User-defined color palette
-      palette <- own_palette
+      palette <- color_palette
     }
   } else {
     if (!is.null(color_variable)) {
@@ -117,11 +128,11 @@ annotate_tree <- function(tree,
 
   if (midroot == TRUE) {
     if (tree_type == "phylo") {
-      tree <- midpoint.root(tree)
+      tree <- midpoint(tree, node.labels = "support")
       }
 
     if (tree_type == "treedata") {
-      tree@phylo <- midpoint.root(tree@phylo)
+      tree@phylo <- midpoint(tree@phylo, node.labels = "support")
       }
   }
 
@@ -136,7 +147,8 @@ annotate_tree <- function(tree,
         {if (isTRUE(node_labels))
           geom_text(aes(label=node))} +
         {if (isTRUE(bootstrap_lab))
-          geom_nodelab(size = bootlab_size)} +
+          geom_nodelab(size = bootlab_size,
+                       geom = nodelab_geom)} +
         {if (!is.null(bootstrap_var))
           geom_nodepoint(aes(fill = !! sym(bootstrap_var)),
                          size = nodepoint_size,
@@ -145,7 +157,9 @@ annotate_tree <- function(tree,
           geom_cladelabel(clade_label_node,
                           clade_label,
                           offset = cladelabel_offset,
-                          align = align_cladelabel)} +
+                          align = align_cladelabel,
+                          linetype = line_type,
+                          linesize = line_size)} +
         {if (!is.null(label_variable))
           geom_tiplab2(aes(label = !! sym(label_variable)),
                        offset = label_offset,
@@ -161,12 +175,16 @@ annotate_tree <- function(tree,
         {if (is.null(color_variable) & !is.null(shape_variable))
           geom_tippoint(aes(shape = !! sym(shape_variable)),
                         size = tippoint_size)} +
-        {if (!is.null(treescale))
+        {if (isTRUE(treescale))
           geom_treescale(x = treescale_x,
                          y = treescale_y,
                          linesize = treescale_linesize)} +
         {if (!is.null(color_variable))
           scale_color_manual(values = palette)} +
+        {if (!is.null(shape_variable))
+          scale_shape_manual(values = shape_values)} +
+        {if (!is.null(shape_palette))
+          scale_shape_manual(values = shape_palette)} +
         {if (nodepoint_color == "viridis")
           scale_fill_viridis(limits = c(0, 100),
                              na.value = "white",
@@ -194,7 +212,8 @@ annotate_tree <- function(tree,
         {if (isTRUE(node_labels))
           geom_text(aes(label=node))} +
         {if (isTRUE(bootstrap_lab))
-          geom_nodelab(size = bootlab_size)} +
+          geom_nodelab(size = bootlab_size,
+                       geom = nodelab_geom)} +
         {if (!is.null(bootstrap_var))
           geom_nodepoint(aes(fill = !! sym(bootstrap_var)),
                          size = nodepoint_size,
@@ -208,7 +227,9 @@ annotate_tree <- function(tree,
           geom_tiplab(aes(label = !! sym(label_variable)),
                       offset = label_offset,
                       size = label_size,
-                      align = align)} +
+                      align = align,
+                      linetype = line_type,
+                      linesize = line_size)} +
         {if (!is.null(color_variable) & !is.null(shape_variable))
           geom_tippoint(aes(color = !! sym(color_variable),
                             shape = !! sym(shape_variable)),
@@ -219,12 +240,16 @@ annotate_tree <- function(tree,
         {if (is.null(color_variable) & !is.null(shape_variable))
           geom_tippoint(aes(shape = !! sym(shape_variable)),
                         size = tippoint_size)} +
-        {if (!is.null(treescale))
+        {if (isTRUE(treescale))
           geom_treescale(x = treescale_x,
                          y = treescale_y,
                          linesize = treescale_linesize)} +
         {if (!is.null(color_variable))
           scale_color_manual(values = palette)} +
+        {if (!is.null(shape_variable))
+          scale_shape_manual(values = shape_values)} +
+        {if (!is.null(shape_palette))
+          scale_shape_manual(values = shape_palette)} +
         {if (nodepoint_color == "viridis")
           scale_fill_viridis(limits = c(0, 100),
                              na.value = "white",
