@@ -2,17 +2,21 @@
 % Please edit documentation in R/calc_dist.R
 \name{calc_dist}
 \alias{calc_dist}
-\title{Calculate distances from cgMLST alleles}
+\title{Calculate distances from MLST/cgMLST alleles}
 \usage{
-calc_dist(path, metric = "gower")
+calc_dist(allele_matrix, method = "average", metric = "gower", phylo = TRUE)
 }
 \arguments{
-\item{path}{Full path to the cgMLST.tsv file, directly from chewBBACA}
+\item{allele_matrix}{The matrix holding the allele data. Row names should hold the sample IDs}
+
+\item{method}{Character string specifying the clustering method to be used, default "average" (see \code{\link[stats]{hclust}})}
 
 \item{metric}{Character string specifying the metric to be used, default "gower" (see \code{\link[cluster]{daisy}})}
+
+\item{phylo}{Logical, if TRUE a phylo object will be calculated from the distance matrix}
 }
 \description{
-Imports the cgMLST.tsv file from chewBBACA and calculates distances between samples. Outputs a distance matrix.
+Function that calculates the distances between samples based on an allele matrix.
 }
 \author{
 Håkon Kaspersen, \email{hakon.kaspersen@vetinst.no}

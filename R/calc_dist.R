@@ -1,30 +1,35 @@
-#' Calculate distances from cgMLST alleles
+#' Calculate distances from MLST/cgMLST alleles
 #'
-#' Imports the cgMLST.tsv file from chewBBACA and calculates distances between samples. Outputs a distance matrix.
+#' Function that calculates the distances between samples based on an allele matrix.
 #'
-#' @param path Full path to the cgMLST.tsv file, directly from chewBBACA
+#' @param allele_matrix The matrix holding the allele data. Row names should hold the sample IDs
+#' @param method Character string specifying the clustering method to be used, default "average" (see \code{\link[stats]{hclust}})
 #' @param metric Character string specifying the metric to be used, default "gower" (see \code{\link[cluster]{daisy}})
+#' @param phylo Logical, if TRUE a phylo object will be calculated from the distance matrix
 #'
 #' @author Håkon Kaspersen, \email{hakon.kaspersen@@vetinst.no}
 #'
 #' @export
 #' @import dplyr
 #' @importFrom cluster daisy
-#' @importFrom utils read.table
-#' @importFrom tibble column_to_rownames
+#' @importFrom ape as.phylo
 #'
-calc_dist <- function(path,
-                      metric = "gower") {
-  # read cgMLST data
-  data <- read.table(path,
-                     sep = "\t",
-                     header = TRUE,
-                     colClasses = "factor") %>%
-    na_if("0") %>%
-    column_to_rownames("FILE")
+calc_dist <- function(allele_matrix,
+                      method = "average",
+                      metric = "gower",
+                      phylo = TRUE) {
 
-  # calculate distances
-  dist <- as.matrix(daisy(data, metric = metric))
+  # calculate distances from matrix
+  dist <- hclust(daisy(allele_matrix,
+                       metric = metric),
+                 method = method)
 
-  return(dist)
+  # generate phylo object if phylo == TRUE
+  if (phylo == TRUE) {
+    tree <- as.phylo(dist)
+    tree$tip.label <- rownames(allele_data)
+    return(tree)
+  } else {
+    return(dist)
+  }
 }

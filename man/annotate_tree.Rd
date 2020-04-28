@@ -4,20 +4,43 @@
 \alias{annotate_tree}
 \title{Annotate tree with metadata}
 \usage{
-annotate_tree(tree, metadata, layout = "circular",
-  tree_color = "black", line_width = 0.1, color_variable = NULL,
-  tippoint_size = 1, label_variable = NULL, label_size = 4,
-  label_offset = 0.01, shape_variable = NULL, shape_values = c(15,
-  16, 17, 18, 19), clade_label_node = NULL, clade_label = NULL,
-  cladelabel_offset = NULL, align_cladelabel = FALSE, align = FALSE,
-  line_type = "dotted", line_size = 0.5, ladderize = TRUE,
-  midroot = FALSE, node_labels = FALSE, bootstrap_lab = TRUE,
-  nodelab_geom = "label", bootlab_size = 3, bootstrap_var = NULL,
-  nodepoint_size = 3, nodepoint_color = "viridis",
-  viridis_option = "D", treescale = TRUE, treescale_x = NULL,
-  treescale_y = NULL, treescale_linesize = 0.5,
-  palette_type = "Paired", legend_position = "right",
-  color_palette = NULL, shape_palette = NULL, tree_type = "phylo")
+annotate_tree(
+  tree,
+  metadata,
+  layout = "circular",
+  tree_color = "black",
+  line_width = 0.1,
+  color_variable = NULL,
+  tippoint_size = 1,
+  label_variable = NULL,
+  label_size = 4,
+  label_offset = 0.01,
+  shape_variable = NULL,
+  shape_values = c(21, 22, 23, 24, 25),
+  clade_label_node = NULL,
+  clade_label = NULL,
+  cladelabel_offset = NULL,
+  align_cladelabel = FALSE,
+  align = FALSE,
+  ladderize = TRUE,
+  midroot = FALSE,
+  node_labels = FALSE,
+  bootstrap_lab = TRUE,
+  nodelab_geom = "label",
+  bootlab_size = 3,
+  bootstrap_var = NULL,
+  nodepoint_size = 3,
+  treescale = TRUE,
+  treescale_x = NULL,
+  treescale_y = NULL,
+  treescale_linesize = 0.5,
+  palette_type = "Paired",
+  legend_position = "right",
+  color_palette = NULL,
+  shape_palette = NULL,
+  node_palette = NULL,
+  tree_type = "phylo"
+)
 }
 \arguments{
 \item{tree}{A tree object to annotate}
@@ -54,10 +77,6 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{align}{Should the labels align?}
 
-\item{line_type}{If align = TRUE, what type of line should be rendered?}
-
-\item{line_size}{If align = TRUE, the size of the lines}
-
 \item{ladderize}{Should the tips be ladderized?}
 
 \item{midroot}{Should the tree be midrooted?}
@@ -74,8 +93,6 @@ annotate_tree(tree, metadata, layout = "circular",
 
 \item{nodepoint_size}{The size of the colored bootstrap nodes}
 
-\item{nodepoint_color}{Color scale for bootstrap values, either "viridis" or "base"}
-
 \item{treescale}{Should a treescale be rendered?}
 
 \item{treescale_x}{x position of treescale}
@@ -91,6 +108,8 @@ annotate_tree(tree, metadata, layout = "circular",
 \item{color_palette}{If a named vector of colors are specified here, they are used instead of the automatically generated colors from colorBrewer}
 
 \item{shape_palette}{Use your own named vector as shape palette}
+
+\item{node_palette}{Use your own colors for bootstrap values}
 
 \item{tree_type}{What type of tree object to use, either "treedata" or "phylo"}
 }

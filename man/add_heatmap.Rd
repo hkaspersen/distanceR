@@ -4,10 +4,21 @@
 \alias{add_heatmap}
 \title{Add heatmap to tree objects}
 \usage{
-add_heatmap(tree, heatmap_data, layout = "circular", perc_open = 10,
-  perc_rotate = 95, heatmap_offset = 0.05, heatmap_width = 0.5,
-  colnames_offset = 0, colnames_position = "top", colnames_angle = 0,
-  font_size = 5, palette_type = "Paired", own_palette = NULL)
+add_heatmap(
+  tree,
+  heatmap_data,
+  layout = "circular",
+  perc_open = 10,
+  perc_rotate = 95,
+  heatmap_offset = 0.05,
+  heatmap_width = 0.5,
+  colnames_offset = 0,
+  colnames_position = "top",
+  colnames_angle = 0,
+  font_size = 5,
+  palette_type = "Paired",
+  own_palette = NULL
+)
 }
 \arguments{
 \item{tree}{A tree object to annotate}

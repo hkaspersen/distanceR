@@ -11,10 +11,11 @@ LazyData: true
 Depends: R (>= 3.5.0)
 Imports:
   dplyr,
+  phangorn,
   tibble,
   cluster,
   ape,
   ggtree,
   ggplot2,
   RColorBrewer
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
