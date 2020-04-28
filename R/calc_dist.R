@@ -27,7 +27,7 @@ calc_dist <- function(allele_matrix,
   # generate phylo object if phylo == TRUE
   if (phylo == TRUE) {
     tree <- as.phylo(dist)
-    tree$tip.label <- rownames(allele_data)
+    tree$tip.label <- rownames(allele_matrix)
     return(tree)
   } else {
     return(dist)
