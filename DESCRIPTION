@@ -4,7 +4,7 @@ Title: Distance calculation, tree generation and tree annotation
 Version: 0.1.0
 Author: Håkon Kaspersen
 Maintainer: Håkon Kaspersen <hakon.kaspersen@vetinst.no>
-Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. 
+Description: Generate dendrograms with annotations from cgMLST data, or import pre-generated trees and annotate. Calculate distances for easy plotting with ggtree.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -17,5 +17,8 @@ Imports:
   ape,
   ggtree,
   ggplot2,
-  RColorBrewer
-RoxygenNote: 7.1.0
+  RColorBrewer,
+  funtools,
+  tidyr,
+  tidytree
+RoxygenNote: 7.1.1
