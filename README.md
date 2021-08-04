@@ -23,5 +23,7 @@ Activate with library command.
 
 - plot_tanglegram: Create a tanglegram between two trees to easily compare the leaves
 
+- simpson_diversity: Calculate the simpson diversity of data in a column.
+
 ## Author
 Håkon Kaspersen, Norwegian Veterinary Institute.
